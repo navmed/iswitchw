@@ -3,7 +3,7 @@
 ; User configuration
 ;
 #SingleInstance force
-#NoTrayIcon
+
 
 ; Window titles containing any of the listed substrings are filtered out from
 ; the initial list of windows presented when iswitchw is activated. Can be
@@ -64,17 +64,21 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 AutoTrim, off
 
 Gui, +LastFound +AlwaysOnTop -Caption +ToolWindow
-Gui, Color, black,black
+Gui, Color, 004444,black
 WinSet, Transparent, 225
-Gui, Font, s16 cEEE8D5 bold, Consolas
-Gui, Margin, 4, 4
+Gui, Font, s16 cEEE8D5, Segoe UI
+Gui, Margin, 3, 3
 Gui, Add, Text,     w100 h30 x6 y8, Search`:
 Gui, Add, Edit,     w500 h30 x110 y4 gSearchChange vsearch,
-Gui, Add, ListView, w854 h510 x4 y40 -VScroll -HScroll -Hdr -Multi Count10 AltSubmit gListViewClick, index|title|proc
+Gui, Add, ListView, w900 h510 x4 y40 -VScroll -HScroll -Hdr -Multi Count10 AltSubmit gListViewClick, index|title|proc
 
 ;----------------------------------------------------------------------
 ;
 ; Win+space to activate.
+;
+;----------------------------------------------------------------------
+;
+; Win+space to activate window switcher interface.
 ;
 #space::
 
@@ -91,7 +95,7 @@ ControlFocus, Edit1, ahk_id %switcher_id%
 
 Loop
 {
-  Input, input, L1, {enter}{esc}{tab}{backspace}{delete}{up}{down}{left}{right}{home}{end}{F4}
+  Input, input, L1, {enter}{esc}{tab}{backspace}{delete}{up}{down}{left}{right}{home}{end}{F1}{F2}{F3}{F4}{F5}{F6}{F7}{F8}{F9}{F10}{F11}{F12}
 
   if ErrorLevel = EndKey:enter
   {
@@ -174,15 +178,75 @@ Loop
     send % AddModifierKeys("{end}")
     continue
   }
+  else if ErrorLevel = EndKey:F1
+  {
+    SwitchToWindowByIndex(1)
+    break
+  }
+  else if ErrorLevel = EndKey:F2
+  {
+    SwitchToWindowByIndex(2)
+    break
+  }
+  else if ErrorLevel = EndKey:F3
+  {
+    SwitchToWindowByIndex(3)
+    break
+  }
   else if ErrorLevel = EndKey:F4
   {
     if GetKeyState("Alt","P")
       ExitApp
+    else {
+      SwitchToWindowByIndex(4)
+      break
+    }
+  }
+  else if ErrorLevel = EndKey:F5
+  {
+    SwitchToWindowByIndex(5)
+    break
+  }
+  else if ErrorLevel = EndKey:F6
+  {
+    SwitchToWindowByIndex(6)
+    break
+  }
+  else if ErrorLevel = EndKey:F7
+  {
+    SwitchToWindowByIndex(7)
+    break
+  }
+  else if ErrorLevel = EndKey:F8
+  {
+    SwitchToWindowByIndex(8)
+    break
+  }
+  else if ErrorLevel = EndKey:F9
+  {
+    SwitchToWindowByIndex(9)
+    break
+  }
+  else if ErrorLevel = EndKey:F10
+  {
+    SwitchToWindowByIndex(10)
+    break
+  }
+  else if ErrorLevel = EndKey:F11
+  {
+    SwitchToWindowByIndex(11)
+    break
+  }
+  else if ErrorLevel = EndKey:F12
+  {
+    SwitchToWindowByIndex(12)
+    break
   }
 
   ControlFocus, Edit1, ahk_id %switcher_id%
   Control, EditPaste, %input%, Edit1, ahk_id %switcher_id%
 }
+
 
 exit
 
@@ -617,6 +681,36 @@ Own work:
 - modified code for speed, might lead to different results compared to original code
 - optimized for speed (30% faster then original SIFT3 and 13.3 times faster than basic Levenshtein distance)
 */
+
+;----------------------------------------------------------------------
+;
+; Switch to window by index (1-12) from the available windows list
+;
+SwitchToWindowByIndex(index)
+{
+  global windows
+  
+  ; Check if the requested index exists in the current filtered list
+  if (index <= windows.MaxIndex())
+  {
+    wid := windows[index].id
+    
+    ; Close the dialog first
+    Gui Submit
+    
+    ; Activate the window using the same logic as ActivateWindow()
+    IfWinActive, ahk_id %wid%
+    {
+      WinGet, state, MinMax, ahk_id %wid%
+      if (state = -1)
+      {
+        WinRestore, ahk_id %wid%
+      }
+    } else {
+      WinActivate, ahk_id %wid%
+    }
+  }
+}
 
 ;----------------------------------------------------------------------
 ;
