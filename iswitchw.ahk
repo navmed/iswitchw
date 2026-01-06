@@ -74,13 +74,13 @@ Gui, Add, ListView, w900 h510 x4 y40 -VScroll -HScroll -Hdr -Multi Count10 AltSu
 
 ;----------------------------------------------------------------------
 ;
-; Win+space to activate.
+; Alt + CapsLock to activate.
 ;
 ;----------------------------------------------------------------------
 ;
-; Win+space to activate window switcher interface.
+; Alt + CapsLock to activate window switcher interface.
 ;
-#space::
+!CapsLock::
 
 search =
 lastSearch =
