@@ -1,7 +1,7 @@
 # iswitchw 
 ## fast keyboard-driven window switching via AutoHotKey
 
-## My version allows you to select one of the first 12 apps from the list using the function keys.
+### This version allows you to select one of the first 12 apps from the list using the function keys.
 
 When iswitchw is triggered, the titles of all visible windows are shown in a
 popup. Start typing to narrow possible matches -- hit enter at any point to

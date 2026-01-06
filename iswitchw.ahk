@@ -195,12 +195,8 @@ Loop
   }
   else if ErrorLevel = EndKey:F4
   {
-    if GetKeyState("Alt","P")
-      ExitApp
-    else {
-      SwitchToWindowByIndex(4)
-      break
-    }
+    SwitchToWindowByIndex(4)
+    break
   }
   else if ErrorLevel = EndKey:F5
   {
